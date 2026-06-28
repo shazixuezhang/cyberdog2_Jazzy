@@ -1,0 +1,33 @@
+# 仿真时钟同步（必开，解决TF时间戳丢弃、RViz无变换）
+- ros_topic_name: "/clock"
+  gz_topic_name: "/clock"
+  ros_type_name: "rosgraph_msgs/msg/Clock"
+  gz_type_name: "gz.msgs.Clock"
+  direction: GZ_TO_ROS
+
+# 四肢关节状态（解决RViz四肢No Transform核心）
+- ros_topic_name: "/joint_states"
+  gz_topic_name: "/joint_states"
+  ros_type_name: "sensor_msgs/msg/JointState"
+  gz_type_name: "gz.msgs.Model"
+  direction: GZ_TO_ROS
+
+# IMU传感器
+- ros_topic_name: "/imu"
+  gz_topic_name: "/imu"
+  ros_type_name: "sensor_msgs/msg/Imu"
+  gz_type_name: "gz.msgs.IMU"
+  direction: GZ_TO_ROS
+
+# 激光雷达
+- ros_topic_name: "/scan"
+  gz_topic_name: "/scan"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
+
+# 参数下发话题（控制器参数动态更新）
+- ros_topic_name: "/yaml_parameter"
+  gz_topic_name: "/yaml_parameter"
+  ros_type_name: "std_msgs/msg/String"
+  gz_type_name: "gz.msgs.StringMsg"
+  direction: BIDIRECTIONAL

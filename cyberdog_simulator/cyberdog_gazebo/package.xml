@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>cyberdog_gazebo</name>
+  <version>0.0.0</version>
+  <description>The cyberdog_gazebo package</description>
+
+  <maintainer email="lijunhong1@xiaomi.com">ljh</maintainer>
+  <maintainer email="youyangwei1@xiaomi.com">You Yangwei</maintainer>
+
+  <license>Apache License, Version 2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- 统一只用depend，自动覆盖编译+运行，消除冗余警告 -->
+  <depend>rclcpp</depend>
+  <depend>rclcpp_components</depend>
+  <depend>Eigen3</depend>
+  <depend>cyberdog_msg</depend>
+  <depend>lcm</depend>
+  <depend>yaml_cpp_vendor</depend>
+
+  <!-- ROS封装gz vendor包，只写带下划线vendor，不要gz-sim/gz-math横杠库 -->
+  <depend>gz_cmake_vendor</depend>
+  <depend>gz_math_vendor</depend>
+  <depend>gz_utils_vendor</depend>
+  <depend>gz_plugin_vendor</depend>
+  <depend>gz_sim_vendor</depend>
+
+  <!-- ROS与仿真桥接包 -->
+  <depend>ros-jazzy-ros-gz</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
