@@ -30,6 +30,7 @@ cd ..
 ## 源码编译指令
 采用合并安装+软链接编译，仅编译运动控制与仿真核心包，编译命令：
 ```bash
+source /opt/ros/jazzy/setup.bash
 colcon build --merge-install --symlink-install --packages-up-to cyberdog_locomotion cyberdog_simulator
 ```
 编译完成后刷新环境变量：
