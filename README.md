@@ -8,8 +8,15 @@
 
 ### 系统环境
 - 操作系统：Ubuntu 24.04 LTS
-- ROS版本：ROS 2 Jazzy
-- 仿真器：gz-sim Jetty (gazebo10+)
+- ROS版本：ROS 2 Jazzy Jalisco
+- 仿真器：gz-sim Jetty 10.x
+
+### 第三方库实测版本（编译通过）
+| 库名称 | 版本号 |
+|--------|--------|
+| Eigen3 | 5.0.1 |
+| yaml-cpp | 0.9.0（编译为动态库） |
+| LCM | 1.5.2 |
 
 ### 一、APT基础软件包
 ```bash
@@ -25,9 +32,9 @@ python3-colcon-common-extensions
 ```
 
 ### 二、手动编译安装第三方库（必装）
-> 运动控制器依赖 LCM、yaml-cpp、Eigen，APT版本过低需要源码编译安装
+> 运动控制器依赖 LCM、yaml-cpp、Eigen，APT源版本较低，必须使用源码编译安装对应版本
 
-#### 1. 安装 LCM
+#### 1. 安装 LCM 1.5.2
 ```bash
 git clone https://github.com/lcm-proj/lcm.git
 cd lcm
@@ -39,7 +46,7 @@ sudo ldconfig
 cd ../..
 ```
 
-#### 2. 安装 yaml-cpp（编译为动态库）
+#### 2. 安装 yaml-cpp 0.9.0（编译为动态库）
 ```bash
 git clone https://github.com/jbeder/yaml-cpp.git
 cd yaml-cpp
@@ -51,7 +58,7 @@ sudo ldconfig
 cd ../..
 ```
 
-#### 3. 安装 Eigen3
+#### 3. 安装 Eigen3 5.0.1
 ```bash
 git clone https://gitlab.com/libeigen/eigen.git
 cd eigen
@@ -123,7 +130,7 @@ ros2 launch cyberdog_gazebo gazebo.launch.py use_lidar:=false
 3. 无`/scan`激光雷达话题
    启动指令添加`use_lidar:=true`，world已开启Ogre2渲染引擎支持gpu_lidar；
 4. 编译报错找不到 lcm / yaml-cpp / Eigen
-   重新执行上面三步源码编译+`sudo ldconfig`更新系统库缓存；
+   确认库版本严格匹配上表，执行编译安装后运行`sudo ldconfig`更新系统动态库缓存；
 5. git push推送提示non-fast-forward
    执行分支上游绑定：`git branch --set-upstream-to=cyberdog2_Jazzy main`后再pull/push。
 
