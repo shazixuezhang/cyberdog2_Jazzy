@@ -92,7 +92,7 @@ source install/setup.bash
 ## 仿真启动方式
 ### 启动脚本一键运行（推荐）
 ```bash
-python3 src/cyberdog_sim/src/cyberdog_gazebo/script/launchsim.py
+python3 src/cyberdog_sim/cyberdog_simulator/cyberdog_gazebo/script/launchsim.py
 ```
 脚本内置：gz-sim世界加载、机器人模型生成、ros_gz_bridge话题桥、四足共享内存控制器后台自启动、雷达/IMU传感器自动使能。
 
