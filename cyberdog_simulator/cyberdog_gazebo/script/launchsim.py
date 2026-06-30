@@ -16,31 +16,34 @@ import time
 import subprocess
 
 def launchsim():
-    # 启动Gazebo仿真终端，替换 -e 为 --
+    # 启动Gazebo仿真终端
+    print("Launch Gazebo terminal...")
     subprocess.run([
         'gnome-terminal',
         '-t', 'cyberdog_gazebo',
         '--',
-        'bash', './src/cyberdog_sim/src/cyberdog_simulator/cyberdog_gazebo/script/launchgazebo.sh'
+        'bash', './src/cyberdog_sim/cyberdog_simulator/cyberdog_gazebo/script/launchgazebo.sh'
     ])
     time.sleep(5)
 
     # 启动运动控制程序终端
+    print("Launch Control terminal...")
     subprocess.run([
         'gnome-terminal',
         '-t', 'cyberdog_control',
         '--',
-        'bash', './src/cyberdog_sim/src/cyberdog_simulator/cyberdog_gazebo/script/launchcontrol.sh'
+        'bash', './src/cyberdog_sim/cyberdog_simulator/cyberdog_gazebo/script/launchcontrol.sh'
     ])
     time.sleep(5)
-
     # 启动可视化/RViz终端
+    print("Launch Visual terminal...")
     subprocess.run([
         'gnome-terminal',
         '-t', 'cyberdog_viusal',
         '--',
-        'bash', './src/cyberdog_sim/src/cyberdog_simulator/cyberdog_gazebo/script/launchvisual.sh'
+        'bash', './src/cyberdog_sim/cyberdog_simulator/cyberdog_gazebo/script/launchvisual.sh'
     ])
+    time.sleep(5)
 
 if __name__ == "__main__":
     launchsim()

@@ -38,6 +38,10 @@
 #include "lcmhandler.hpp"
 
 #include <cyberdog_msg/msg/apply_force.hpp>
+#include <sensor_msgs/msg/joint_state.hpp>
+#include <tf2_ros/transform_broadcaster.h>
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 
 // Use gz::sim namespace to avoid namespace conflicts in gazebo namespace
 using namespace gz::sim;
@@ -175,6 +179,10 @@ namespace gazebo
     bool use_TNcurve_motormodel_;
     bool use_force_contact_sensor_;
     bool initialized_ = false;
+
+    rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr joint_state_pub_;
+    std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
+    sensor_msgs::msg::JointState joint_state_msg_;
   };
 }
 

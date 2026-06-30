@@ -33,6 +33,9 @@ find_package(rosidl_default_generators REQUIRED)
 find_package(rosidl_typesupport_cpp REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(lcm REQUIRED)
 find_package(cyberdog_msg REQUIRED)
@@ -53,6 +56,9 @@ find_package(ros_gz REQUIRED COMPONENTS ros_gz_sim ros_gz_bridge)
 # 依赖列表
 set(dependencies
   rclcpp
+  sensor_msgs
+  tf2_ros
+  tf2_geometry_msgs
   Eigen3
   cyberdog_msg
   ros_gz
