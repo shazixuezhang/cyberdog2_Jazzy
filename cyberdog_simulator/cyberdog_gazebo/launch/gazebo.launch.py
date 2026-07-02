@@ -36,7 +36,6 @@ def launch_setup(context, *args, **kwargs):
 
     # config
     hang_robot = LaunchConfiguration('hang_robot').perform(context)
-    use_lidar = LaunchConfiguration('use_lidar').perform(context)
     wname = LaunchConfiguration('wname').perform(context)
     rname = LaunchConfiguration('rname').perform(context)
 
@@ -52,10 +51,9 @@ def launch_setup(context, *args, **kwargs):
     world_path = os.path.join(pkg_share, 'world', wname+'.world')
 
     # urdf
-    xacro_path = os.path.join(get_package_share_directory(
-        rname+'_description'), 'xacro', 'robot.xacro')
-    urdf_contents = xacro.process_file(xacro_path, mappings={
-                                       'DEBUG': hang_robot, 'USE_LIDAR': use_lidar}).toprettyxml(indent='  ')
+    xacro_path = os.path.join(get_package_share_directory(rname+'_description'), 'xacro', 'robot.xacro')
+    urdf_contents = xacro.process_file(xacro_path, mappings={'DEBUG': hang_robot}).toprettyxml(indent='  ')
+
 
     # Write URDF to a temp file for gz-sim create command
     with tempfile.NamedTemporaryFile(mode='w', suffix='.urdf', delete=False) as f:
@@ -89,33 +87,18 @@ def launch_setup(context, *args, **kwargs):
         }.items(),
     )
 
-    # ROS2 <-> GZ bridge for sensors
-    # Use ros_gz_bridge's automatic type mapping
-    # Format: gz_topic[ros2_topic  (GZ -> ROS, auto-detect types)
-
-    # IMU: gz topic -> ROS2 /imu
-    imu_bridge = Node(
+    bridge_node = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
-        name='imu_bridge',
         arguments=[
-            '/imu' + '[' + '/imu'
+            # IMU
+            '/model/cyberdog/sensor/imu@sensor_msgs/msg/Imu@gz::msgs::IMU',
+            # 2D单线雷达 → LaserScan
+            '/model/cyberdog/sensor/scan@sensor_msgs/msg/LaserScan@gz::msgs::LaserScan'
         ],
-        output='screen'
+        output={'both': 'screen'}
     )
-
-    # Lidar: gz topic -> ROS2 /scan (conditional)
-    scan_bridge = Node(
-        package='ros_gz_bridge',
-        executable='parameter_bridge',
-        name='scan_bridge',
-        arguments=[
-            '/scan' + '[' + '/scan'
-        ],
-        output='screen',
-        condition=IfCondition(use_lidar)
-    )
-
+    
     # Delay spawn entity to ensure gz-sim world is ready
     delayed_spawn = TimerAction(
         period=3.0,
@@ -124,8 +107,7 @@ def launch_setup(context, *args, **kwargs):
 
     return [
         start_gz_sim,
-        imu_bridge,
-        scan_bridge,
+        bridge_node,
         delayed_spawn]
 
 
@@ -159,10 +141,6 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument(
             name='hang_robot',
-            default_value='false'
-        ),
-        DeclareLaunchArgument(
-            name='use_lidar',
             default_value='false'
         ),
         DeclareLaunchArgument(

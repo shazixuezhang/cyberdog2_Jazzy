@@ -1,7 +1,6 @@
 /*! @file simulation_bridge.cpp
- *  @brief  The SimulationBridge runs a RobotController and connects it to a
- * Simulator, using shared memory. It is the simulation version of the
- * HardwareBridge.
+ *  @brief  SimulationBridge 运行 RobotController 并将其连接到
+ *  使用共享内存的 Simulator。它是 HardwareBridge 的仿真版本。
  */
 
 #include <iostream>
@@ -10,87 +9,82 @@
 #include "utilities/segfault_handler.hpp"
 
 /**
- * @brief Connect to a simulation.
+ * @brief 连接到仿真。
  *
  */
 void SimulationBridge::Run() {
-    // init shared memory:
+    // 初始化共享内存
     shared_memory_.Attach( DEVELOPMENT_SIMULATOR_SHARED_MEMORY_NAME );
     shared_memory_.Init( false );
 
     InstallSegfaultHandler( shared_memory_().robotToSim.errorMessage );
 
-    // init Quadruped Controller
+    // 初始化四足机器人控制器
     try {
-        printf( "[Simulation Driver] Starting main loop...\n" );
+        printf( "[Simulation Driver] 开始主循环（...\n" );
         bool first_run = true;
         for ( ;; ) {
-            // wait for our turn to access the shared memory
-            // on the first loop, this gives the simulator a chance to put stuff in
-            // shared memory before we start
+            // 等待轮到我们访问共享内存
+            // 在第一次循环中，这给模拟器一个机会在我们开始之前将内容放入共享内存
             shared_memory_.WaitForSimulator();
 
             if ( first_run ) {
                 first_run = false;
-                // check that the robot type is correct:
+                // 检查机器人类型是否正确
                 if ( robot_ != shared_memory_().simToRobot.robotType ) {
-                    printf( "simulator and simulatorDriver don't agree on which robot we are "
-                            "simulating (robot %d, sim %d)\n",
+                    printf( "模拟器和仿真驱动 不同意我们正在模拟的机器人类型（机器人 %d，仿真 %d）\n",
                             ( int )robot_, ( int )shared_memory_().simToRobot.robotType );
-                    throw std::runtime_error( "robot mismatch!" );
+                    throw std::runtime_error( "机器人类型不匹配" );
                 }
             }
 
-            // the simulator tells us which mode to run in
+            // 模拟器告诉我们要运行的仿真模式
             sim_mode_ = shared_memory_().simToRobot.mode;
             switch ( sim_mode_ ) {
-            case SimulatorMode::kRunContorlParameters:  // there is a new control
-                // parameter request
+            case SimulatorMode::kRunContorlParameters:  // 有新的控制参数请求
+                // 处理控制参数请求
                 HandleControlParameters();
                 break;
-            case SimulatorMode::kRunContorller:  // the simulator is ready for the
-                // next robot controller run
+            case SimulatorMode::kRunContorller:  // 模拟器准备运行下一个机器人控制器迭代
                 iterations_++;
                 RunRobotControl();
                 break;
-            case SimulatorMode::kDoNothing:  // the simulator is just checking to see
-                // if we are alive yet
+            case SimulatorMode::kDoNothing:  // 模拟器仅检查连接状态，不运行机器人控制器
                 break;
-            case SimulatorMode::kExit:  // the simulator is done with us
-                printf( "[Simulation Driver] Transitioned to exit mode\n" );
+            case SimulatorMode::kExit:  // 模拟器完成与我们的交互
+                printf( "[Simulation Driver] 退出仿真\n" );
                 return;
                 break;
             default:
-                throw std::runtime_error( "unknown simulator mode" );
+                throw std::runtime_error( "未知仿真模式" );
             }
 
-            // tell the simulator we are done
+            // 告诉模拟器我们完成了一个迭代
             shared_memory_.RobotIsDone();
         }
     }
     catch ( std::exception& e ) {
         strncpy( shared_memory_().robotToSim.errorMessage, e.what(), sizeof( shared_memory_().robotToSim.errorMessage ) - 1 );
         shared_memory_().robotToSim.errorMessage[ sizeof( shared_memory_().robotToSim.errorMessage ) - 1 ] = '\0';
-        std::cout << "the error is: " << e.what() << std::endl;
+        std::cout << "错误信息: " << e.what() << std::endl;
         throw e;
     }
 }
 
 /**
- * @brief This function handles a control parameter message from the simulator.
+ * @brief 处理控制参数请求
  *
  */
 void SimulationBridge::HandleControlParameters() {
     ControlParameterRequest&  request  = shared_memory_().simToRobot.controlParameterRequest;
     ControlParameterResponse& response = shared_memory_().robotToSim.controlParameterResponse;
     if ( request.requestNumber <= response.requestNumber ) {
-        // nothing to do!
-        printf( "[SimulationBridge] Warning: the simulator has run a ControlParameter "
-                "iteration, but there is no new request!\n" );
+        // 没有新的请求！
+        printf( "[SimulationBridge] 警告: 模拟器已经运行了一个 ControlParameter 迭代，但是没有新的请求！\n" );
         return;
     }
 
-    // sanity check
+    // 检查请求是否有效
     u64 num_requests = request.requestNumber - response.requestNumber;
     assert( num_requests == 1 );
 
@@ -101,21 +95,20 @@ void SimulationBridge::HandleControlParameters() {
         std::string       name( request.name );
         ControlParameter& param = robot_params_->collection_.LookUp( name );
 
-        // type check
+        // 检查参数类型是否匹配请求类型
         if ( param.kind_ != request.parameterKind ) {
-            throw std::runtime_error( "type mismatch for parameter " + name + ", robot thinks it is " + ControlParameterValueKindToString( param.kind_ ) + " but received a command to set it to "
+            throw std::runtime_error( "参数类型不匹配: " + name + ", 机器人认为它是 " + ControlParameterValueKindToString( param.kind_ ) + "，但是收到了设置为 "
                                       + ControlParameterValueKindToString( request.parameterKind ) );
         }
 
-        // do the actual set
+        // 设置参数值
         param.Set( request.value, request.parameterKind );
 
-        // respond:
-        response.requestNumber = request.requestNumber;  // acknowledge that the set has happened
-        response.parameterKind = request.parameterKind;  // just for debugging print statements
-        response.value         = request.value;          // just for debugging print statements
-        strcpy( response.name,
-                name.c_str() );  // just for debugging print statements
+        // 响应请求
+        response.requestNumber = request.requestNumber;  // 确认设置操作已完成
+        response.parameterKind = request.parameterKind;  // 返回请求的参数类型
+        response.value         = request.value;          // 返回请求的参数值
+        strcpy( response.name, name.c_str() );  // 返回请求的参数名称
         response.requestKind = request.requestKind;
 
         printf( "%s\n", response.ToString().c_str() );
@@ -125,27 +118,26 @@ void SimulationBridge::HandleControlParameters() {
     case ControlParameterRequestKind::kSET_USER_PARAM_BY_NAME: {
         std::string name( request.name );
         if ( !user_params_ ) {
-            printf( "[Simulation Bridge] Warning: tried to set user parameter, but the robot does not have any!\n" );
+            printf( "[SimulationBridge] 警告: 尝试设置用户参数，但是机器人没有用户参数！\n" );
         }
         else {
             ControlParameter& param = user_params_->collection_.LookUp( name );
 
-            // type check
+            // 检查参数类型是否匹配请求类型
             if ( param.kind_ != request.parameterKind ) {
-                throw std::runtime_error( "type mismatch for parameter " + name + ", robot thinks it is " + ControlParameterValueKindToString( param.kind_ ) + " but received a command to set it to "
+                throw std::runtime_error( "参数类型不匹配: " + name + ", 机器人认为它是 " + ControlParameterValueKindToString( param.kind_ ) + "，但是收到了设置为 "
                                           + ControlParameterValueKindToString( request.parameterKind ) );
             }
 
-            // do the actual set
+            // 设置参数值
             param.Set( request.value, request.parameterKind );
         }
 
-        // respond:
-        response.requestNumber = request.requestNumber;  // acknowledge that the set has happened
-        response.parameterKind = request.parameterKind;  // just for debugging print statements
-        response.value         = request.value;          // just for debugging print statements
-        strcpy( response.name,
-                name.c_str() );  // just for debugging print statements
+        // 响应请求
+        response.requestNumber = request.requestNumber;  // 确认设置操作已完成
+        response.parameterKind = request.parameterKind;  // 返回请求的参数类型
+        response.value         = request.value;          // 返回请求的参数值
+        strcpy( response.name, name.c_str() );  // 返回请求的参数名称
         response.requestKind = request.requestKind;
 
         printf( "%s\n", response.ToString().c_str() );
@@ -156,19 +148,18 @@ void SimulationBridge::HandleControlParameters() {
         std::string       name( request.name );
         ControlParameter& param = robot_params_->collection_.LookUp( name );
 
-        // type check
+        // 检查参数类型是否匹配请求类型
         if ( param.kind_ != request.parameterKind ) {
-            throw std::runtime_error( "type mismatch for parameter " + name + ", robot thinks it is " + ControlParameterValueKindToString( param.kind_ ) + " but received a command to set it to "
+            throw std::runtime_error( "参数类型不匹配: " + name + ", 机器人认为它是 " + ControlParameterValueKindToString( param.kind_ ) + "，但是收到了设置为 "
                                       + ControlParameterValueKindToString( request.parameterKind ) );
         }
 
-        // respond
+        // 响应请求
         response.value         = param.Get( request.parameterKind );
-        response.requestNumber = request.requestNumber;  // acknowledge
-        response.parameterKind = request.parameterKind;  // just for debugging print statements
-        strcpy( response.name,
-                name.c_str() );                      // just for debugging print statements
-        response.requestKind = request.requestKind;  // just for debugging print statements
+        response.requestNumber = request.requestNumber;  // 确认获取操作已完成
+        response.parameterKind = request.parameterKind;  // 返回请求的参数类型
+        strcpy( response.name, name.c_str() );                      // 返回请求的参数名称
+        response.requestKind = request.requestKind;  // 返回请求的类型
 
         printf( "%s\n", response.ToString().c_str() );
     } break;

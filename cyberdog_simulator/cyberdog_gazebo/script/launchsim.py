@@ -35,15 +35,16 @@ def launchsim():
         'bash', './src/cyberdog_sim/cyberdog_simulator/cyberdog_gazebo/script/launchcontrol.sh'
     ])
     time.sleep(5)
+
     # 启动可视化/RViz终端
-    print("Launch Visual terminal...")
-    subprocess.run([
-        'gnome-terminal',
-        '-t', 'cyberdog_viusal',
-        '--',
-        'bash', './src/cyberdog_sim/cyberdog_simulator/cyberdog_gazebo/script/launchvisual.sh'
-    ])
-    time.sleep(5)
+    # print("Launch Visual terminal...")
+    # subprocess.run([
+    #     'gnome-terminal',
+    #     '-t', 'cyberdog_viusal',
+    #     '--',
+    #     'bash', './src/cyberdog_sim/cyberdog_simulator/cyberdog_gazebo/script/launchvisual.sh'
+    # ])
+    # time.sleep(5)
 
 if __name__ == "__main__":
     launchsim()
