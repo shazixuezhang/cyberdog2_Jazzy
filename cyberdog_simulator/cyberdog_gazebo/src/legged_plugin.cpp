@@ -54,8 +54,6 @@ namespace gazebo
         std::bind(&LeggedPlugin::ForceHandler, this, std::placeholders::_1));
     node_executor_->AddNode(force_node_);
 
-    joint_state_pub_ = force_node_->create_publisher<sensor_msgs::msg::JointState>(
-        "joint_states", rclcpp::SystemDefaultsQoS());
     tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(force_node_);
 
     // Initialize the sender and receiver of simulator parameters
@@ -210,25 +208,6 @@ namespace gazebo
     frequency_counter_++;
 
     GetJointStates(_ecm);
-
-    joint_state_msg_.header.stamp = force_node_->get_clock()->now();
-    joint_state_msg_.header.frame_id = "base_link";
-    if (joint_state_msg_.name.empty()) {
-      joint_state_msg_.name = joint_names_;
-      joint_state_msg_.position.resize(joint_names_.size());
-      joint_state_msg_.velocity.resize(joint_names_.size());
-      joint_state_msg_.effort.resize(joint_names_.size());
-    }
-    for (size_t i = 0; i < joint_names_.size() && i < q_.size(); i++) {
-      joint_state_msg_.position[i] = q_[i];
-    }
-    for (size_t i = 0; i < joint_names_.size() && i < dq_.size(); i++) {
-      joint_state_msg_.velocity[i] = dq_[i];
-    }
-    for (size_t i = 0; i < joint_names_.size() && i < tau_.size(); i++) {
-      joint_state_msg_.effort[i] = tau_[i];
-    }
-    joint_state_pub_->publish(joint_state_msg_);
 
     if (link_map_.find("base_link") != link_map_.end()) {
       auto &baseLink = link_map_["base_link"];

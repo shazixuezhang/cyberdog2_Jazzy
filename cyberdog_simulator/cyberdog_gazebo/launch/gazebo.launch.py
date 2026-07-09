@@ -90,11 +90,8 @@ def launch_setup(context, *args, **kwargs):
     bridge_node = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
-        arguments=[
-            # IMU
-            '/model/cyberdog/sensor/imu@sensor_msgs/msg/Imu@gz::msgs::IMU',
-            # 2D单线雷达 → LaserScan
-            '/model/cyberdog/sensor/scan@sensor_msgs/msg/LaserScan@gz::msgs::LaserScan'
+        parameters=[
+            {'config_file': os.path.join(pkg_share, 'params', 'cyberdog_bridge.yaml')}
         ],
         output={'both': 'screen'}
     )
