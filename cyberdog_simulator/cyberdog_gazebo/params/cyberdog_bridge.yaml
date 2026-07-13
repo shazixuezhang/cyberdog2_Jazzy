@@ -13,15 +13,15 @@
   direction: GZ_TO_ROS
 
 # IMU传感器
-- ros_topic_name: "/model/cyberdog/sensor/imu"
-  gz_topic_name: "/model/cyberdog/sensor/imu"
+- ros_topic_name: "/imu"
+  gz_topic_name: "/sensor/imu"
   ros_type_name: "sensor_msgs/msg/Imu"
   gz_type_name: "gz.msgs.IMU"
   direction: GZ_TO_ROS
 
-# 激光雷达
-- ros_topic_name: "/model/cyberdog/sensor/scan"
-  gz_topic_name: "/model/cyberdog/sensor/scan"
+# 激光雷达传感器
+- ros_topic_name: "/scan"
+  gz_topic_name: "/sensor/scan"
   ros_type_name: "sensor_msgs/msg/LaserScan"
   gz_type_name: "gz.msgs.LaserScan"
   direction: GZ_TO_ROS

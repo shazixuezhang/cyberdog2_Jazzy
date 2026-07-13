@@ -2,7 +2,6 @@
 <robot name="cyber_dog" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
     <xacro:arg name="ROBOT" default="cyber_dog" />
-    <xacro:arg name="USE_LIDAR" default="false" />
     <xacro:include filename="const.xacro" />
     <xacro:include filename="leg.xacro" />
     <xacro:include filename="gazebo.xacro" />

@@ -27,46 +27,52 @@
 
     <!-- IMU sensor -->
     <gazebo reference="imu_link">
-        <gravity>true</gravity>
         <sensor name="imu_sensor" type="imu">
             <always_on>true</always_on>
-            <update_rate>500</update_rate>
-            <visualize>true</visualize>
-            <topic>imu</topic>
-            <pose>0 0 0 0 0 0</pose>
+            <visualize>false</visualize>
+            <update_rate>100</update_rate>
+            <!-- <imu>
+                <angular_velocity>
+                    <noise>
+                        <mean>0</mean>
+                        <stddev>0.001</stddev>
+                    </noise>
+                </angular_velocity>
+                <linear_acceleration>
+                    <noise>
+                        <mean>0</mean>
+                        <stddev>0.01</stddev>
+                    </noise>
+                </linear_acceleration>
+            </imu> -->
+            <topic>sensor/imu</topic>
         </sensor>
     </gazebo>
 
     <!-- Lidar sensor - changed to gpu_lidar for gz-sim -->
     <gazebo reference="lidar_link">
-        <sensor name="realsense" type="ray">
+        <sensor name="lidar_sensor" type="gpu_lidar">
             <always_on>true</always_on>
             <visualize>true</visualize>
             <pose>0 0 0 0 0 0</pose>
-            <update_rate>5</update_rate>
-            <topic>scan</topic>
-
+            <update_rate>10</update_rate>
             <ray>
-            <scan>
-                <horizontal>
-                <samples>180</samples>
-                <min_angle>-1.57</min_angle>
-                <max_angle>1.57</max_angle>
-                </horizontal>
-            </scan>
-            <range>
-                <min>0.01</min>
-                <max>12.0</max>
-            </range>
-            <!-- 测距噪声 -->
-            <noise type="gaussian">
-                <stddev>0.02</stddev>
-            </noise>
+                <scan>
+                    <horizontal>
+                        <samples>180</samples>
+                        <min_angle>-1.57</min_angle>
+                        <max_angle>1.57</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.01</min>
+                    <max>12.0</max>
+                </range>
             </ray>
+            <topic>sensor/scan</topic>
         </sensor>
     </gazebo>
-
-
+    
     <!-- Foot contacts -->
     <gazebo reference="FR_knee">
         <sensor name="FR_foot_contact" type="contact">

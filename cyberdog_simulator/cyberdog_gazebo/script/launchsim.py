@@ -16,6 +16,15 @@ import time
 import subprocess
 
 def launchsim():
+    # ========== 新增：清理共享内存 & 更新动态库缓存 ==========
+    print("Clean up shared memory /dev/shm ...")
+    # 清理 /dev/shm 共享内存文件
+    subprocess.run(['sudo', 'rm', '-rf', '/dev/shm/*'])
+    # 更新系统动态库缓存
+    subprocess.run(['sudo', 'ldconfig'])
+    print("Cleanup done, starting simulation...")
+    time.sleep(1)
+
     # 启动Gazebo仿真终端
     print("Launch Gazebo terminal...")
     subprocess.run([
