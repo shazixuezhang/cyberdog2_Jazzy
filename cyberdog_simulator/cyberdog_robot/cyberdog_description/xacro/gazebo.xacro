@@ -31,20 +31,6 @@
             <always_on>true</always_on>
             <visualize>false</visualize>
             <update_rate>100</update_rate>
-            <!-- <imu>
-                <angular_velocity>
-                    <noise>
-                        <mean>0</mean>
-                        <stddev>0.001</stddev>
-                    </noise>
-                </angular_velocity>
-                <linear_acceleration>
-                    <noise>
-                        <mean>0</mean>
-                        <stddev>0.01</stddev>
-                    </noise>
-                </linear_acceleration>
-            </imu> -->
             <topic>sensor/imu</topic>
         </sensor>
     </gazebo>

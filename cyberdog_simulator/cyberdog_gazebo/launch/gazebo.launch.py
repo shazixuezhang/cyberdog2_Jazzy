@@ -95,6 +95,23 @@ def launch_setup(context, *args, **kwargs):
         ],
         output={'both': 'screen'}
     )
+
+    # 传感器 TF（匹配 Gazebo 自动生成的 frame_id）
+    tf_lidar = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        arguments=['0.21425', '0', '0.0908', '0', '0', '0',
+                'body', 'cyberdog/base_link/lidar_sensor'],
+        name='lidar_tf_publisher'
+    )
+
+    tf_imu = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        arguments=['0.0334', '-0.0172765', '0.0510469', '0', '0', '0',
+                'body', 'cyberdog/base_link/imu_sensor'],
+        name='imu_tf_publisher'
+    )
     
     # Delay spawn entity to ensure gz-sim world is ready
     delayed_spawn = TimerAction(
@@ -105,7 +122,10 @@ def launch_setup(context, *args, **kwargs):
     return [
         start_gz_sim,
         bridge_node,
-        delayed_spawn]
+        tf_lidar,
+        tf_imu,
+        delayed_spawn,
+    ]
 
 
 def generate_launch_description():
