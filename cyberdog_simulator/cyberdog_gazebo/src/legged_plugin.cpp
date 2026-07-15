@@ -320,7 +320,7 @@ namespace gazebo
         q_body_.z() = quat.Z();
         q_body_.normalize();
         
-        Eigen::Vector3d eulerAngle = q_body_.matrix().eulerAngles(2, 1, 0);
+        Eigen::Vector3d eulerAngle = q_body_.matrix().canonicalEulerAngles(2, 1, 0);
         lcm_sim_handler_.rpy[0] = eulerAngle[2];
         lcm_sim_handler_.rpy[1] = eulerAngle[1];
         lcm_sim_handler_.rpy[2] = eulerAngle[0];
