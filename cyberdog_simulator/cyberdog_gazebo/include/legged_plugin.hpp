@@ -30,6 +30,8 @@
 #include <gz/sim/World.hh>
 #include <gz/sim/components.hh>
 #include <gz/math.hh>
+#include <gz/transport/Node.hh>
+#include <gz/msgs/imu.pb.h>
 #include <sdf/sdf.hh>
 #include <lcm/lcm-cpp.hpp>
 
@@ -85,7 +87,8 @@ namespace gazebo
     void PreUpdate(const UpdateInfo &_info,
                    EntityComponentManager &_ecm) override;
 
-    Eigen::Vector3d forceToBody(_contact_force &_contact_force);
+    Eigen::Vector3d forceToBody(_contact_force &_contact_force, EntityComponentManager &_ecm);
+    void OnIMUMsg(const ::gz::msgs::IMU &_msg);
 
   private:
     /// \brief Update joint states from gazebo
@@ -176,11 +179,14 @@ namespace gazebo
     
     bool use_currentloop_response_;
     bool use_TNcurve_motormodel_;
+    bool use_torque_response_;
     bool use_force_contact_sensor_;
     bool initialized_ = false;
 
     std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
+
+    std::unique_ptr<::gz::transport::Node> gzNode_;
+    ::gz::msgs::IMU imuMsg_;
   };
 }
-
 #endif // LEGGED_PLUGIN_HPP
