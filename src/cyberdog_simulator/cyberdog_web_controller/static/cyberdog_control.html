@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CyberDog 遥控器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            height: 100dvh;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+            overflow: hidden;
+        }
+
+        .container {
+            padding: 2vw;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1vh;
+        }
+
+        .header {
+            text-align: center;
+            padding: 1.5vw 2vw;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2vw;
+        }
+
+        .header h1 {
+            font-size: clamp(16px, 4vw, 28px);
+            margin-bottom: 0.5vh;
+        }
+
+        .status {
+            display: flex;
+            justify-content: center;
+            gap: 2vw;
+            flex-wrap: wrap;
+        }
+
+        .status-item {
+            padding: 1vw 3vw;
+            border-radius: 4vw;
+            font-size: clamp(10px, 2vw, 14px);
+            font-weight: bold;
+        }
+
+        .connected {
+            background: #4CAF50;
+        }
+
+        .disconnected {
+            background: #f44336;
+        }
+
+        .controls {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1vh;
+            min-height: 0;
+        }
+
+        .joystick-area {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .joystick-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5vh;
+        }
+
+        .joystick-label {
+            font-size: clamp(12px, 2.5vw, 16px);
+            color: #aaa;
+        }
+
+        .joystick {
+            width: min(32vw, 32vh, 150px);
+            height: min(32vw, 32vh, 150px);
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            position: relative;
+            touch-action: none;
+        }
+
+        .joystick-knob {
+            width: 40%;
+            height: 40%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .button-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5vw;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 2vw 3vw;
+            border: none;
+            border-radius: 2vw;
+            font-size: clamp(12px, 2.5vw, 16px);
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            flex: 1;
+            min-width: 18vw;
+            white-space: nowrap;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-mode {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+        }
+
+        .btn-stop {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+            color: #333;
+            width: 100%;
+            padding: 2.5vw;
+            font-size: clamp(16px, 3.5vw, 22px);
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 2vw;
+            padding: 1.5vw 3vw;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2vw;
+            font-size: clamp(10px, 2vw, 14px);
+        }
+
+        .speed-slider {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: linear-gradient(to right, #4CAF50, #FFEB3B, #f44336);
+            border-radius: 3px;
+        }
+
+        .speed-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: clamp(20px, 4vw, 28px);
+            height: clamp(20px, 4vw, 28px);
+            background: white;
+            border-radius: 50%;
+        }
+
+        /* ========== 横屏布局 ========== */
+        @media (orientation: landscape) {
+            .container {
+                flex-direction: row;
+                gap: 2vw;
+                padding: 1.5vw;
+            }
+
+            .header {
+                writing-mode: horizontal-tb;
+                padding: 1vw;
+                border-radius: 1.5vw;
+                flex-shrink: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .header h1 {
+                font-size: clamp(14px, 3vw, 22px);
+            }
+
+            .status {
+                gap: 1vw;
+            }
+
+            .status-item {
+                padding: 0.8vw 2vw;
+                font-size: clamp(9px, 1.8vw, 12px);
+            }
+
+            .controls {
+                flex: 1;
+                flex-direction: row;
+                align-items: center;
+                gap: 2vw;
+            }
+
+            .joystick-area {
+                flex: 1;
+                justify-content: center;
+                gap: 2vw;
+            }
+
+            .joystick {
+                width: min(25vw, 40vh, 130px);
+                height: min(25vw, 40vh, 130px);
+            }
+
+            .right-panel {
+                display: flex;
+                flex-direction: column;
+                gap: 1vh;
+                flex-shrink: 0;
+            }
+
+            .button-area {
+                flex-direction: column;
+                gap: 1vh;
+            }
+
+            .btn {
+                flex: 0;
+                min-width: auto;
+                padding: 1.5vw 4vw;
+            }
+
+            .btn-stop {
+                padding: 1.5vw;
+            }
+
+            .speed-control {
+                padding: 1vw 2vw;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐕 CyberDog</h1>
+            <div class="status">
+                <span class="status-item disconnected" id="rosStatus">ROS</span>
+                <span class="status-item disconnected" id="lcmStatus">LCM</span>
+                <span class="status-item disconnected" id="modeStatus">待命</span>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="joystick-area">
+                <div class="joystick-container">
+                    <div class="joystick-label">移动</div>
+                    <div class="joystick" id="moveJoystick">
+                        <div class="joystick-knob"></div>
+                    </div>
+                </div>
+                <div class="joystick-container">
+                    <div class="joystick-label">转向</div>
+                    <div class="joystick" id="turnJoystick">
+                        <div class="joystick-knob"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="button-area">
+                    <button class="btn btn-mode" onclick="setMode('recovery')">🔄 恢复</button>
+                    <button class="btn btn-mode" onclick="setMode('locomotion')">🚶 行走</button>
+                    <button class="btn btn-action" onclick="setMode('stand')">🧍 站立</button>
+                    <button class="btn btn-action" onclick="setMode('damper')">🌊 阻尼</button>
+                </div>
+
+                <button class="btn btn-stop" onclick="emergencyStop()">🛑 急停</button>
+
+                <div class="speed-control">
+                    <span>速度</span>
+                    <input type="range" class="speed-slider" id="speedSlider" min="0" max="100" value="50">
+                    <span id="speedValue">50%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const WS_URL = `ws://${window.location.hostname}:8765`;
+        let ws, speedMultiplier = 0.5;
+
+        function connect() {
+            ws = new WebSocket(WS_URL);
+            ws.onopen = () => console.log('Connected');
+            ws.onmessage = (e) => {
+                const d = JSON.parse(e.data);
+                if (d.type === 'status') {
+                    document.getElementById('rosStatus').className = 'status-item ' + (d.ros_connected ? 'connected' : 'disconnected');
+                    document.getElementById('lcmStatus').className = 'status-item ' + (d.lcm_connected ? 'connected' : 'disconnected');
+                    document.getElementById('lcmStatus').textContent = d.lcm_connected ? 'LCM' : 'LCM';
+                    const modes = { stand: '🧍站立', locomotion: '🚶行走', damper: '🌊阻尼', recovery: '🔄恢复' };
+                    document.getElementById('modeStatus').textContent = modes[d.mode] || d.mode;
+                }
+            };
+            ws.onclose = () => setTimeout(connect, 2000);
+        }
+
+        function send(data) {
+            if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(data));
+        }
+
+        function createJoystick(id, cb) {
+            const el = document.getElementById(id);
+            const knob = el.querySelector('.joystick-knob');
+            let active = false;
+            let pointerId = null;
+
+            el.addEventListener('pointerdown', e => {
+                active = true;
+                pointerId = e.pointerId;
+                el.setPointerCapture(e.pointerId);
+                move(e);
+            });
+
+            el.addEventListener('pointermove', e => {
+                if (active && e.pointerId === pointerId) {
+                    e.preventDefault();
+                    move(e);
+                }
+            });
+
+            el.addEventListener('pointerup', e => {
+                if (e.pointerId === pointerId) {
+                    active = false;
+                    pointerId = null;
+                    reset();
+                    cb(0, 0);
+                }
+            });
+
+            el.addEventListener('pointercancel', () => {
+                active = false;
+                pointerId = null;
+                reset();
+                cb(0, 0);
+            });
+
+            function move(e) {
+                const r = el.getBoundingClientRect();
+                const cx = r.left + r.width / 2;
+                const cy = r.top + r.height / 2;
+                const max = r.width / 2 - r.width * 0.2;
+                let dx = e.clientX - cx;
+                let dy = e.clientY - cy;
+                let dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist > max) {
+                    dx = dx / dist * max;
+                    dy = dy / dist * max;
+                }
+                knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+                cb(dx / max, -dy / max);
+            }
+
+            function reset() {
+                knob.style.transform = 'translate(-50%, -50%)';
+            }
+        }
+
+        createJoystick('moveJoystick', (x, y) => send({ type: 'movement', x_speed: y * speedMultiplier, y_speed: x * speedMultiplier, yaw_rate: 0 }));
+        createJoystick('turnJoystick', (x, y) => send({ type: 'movement', x_speed: 0, y_speed: 0, yaw_rate: x * speedMultiplier }));
+
+        document.getElementById('speedSlider').oninput = function () {
+            speedMultiplier = this.value / 100;
+            document.getElementById('speedValue').textContent = this.value + '%';
+        };
+
+        function setMode(m) { send({ type: 'mode_change', mode: m }); }
+        function emergencyStop() {
+            send({ type: 'emergency_stop' });
+            if (navigator.vibrate) navigator.vibrate(200);
+        }
+
+        connect();
+        setInterval(() => send({ type: 'heartbeat' }), 1000);
+    </script>
+</body>
+
+</html>
