@@ -31,7 +31,7 @@ def launchsim():
         'gnome-terminal',
         '-t', 'cyberdog_gazebo',
         '--',
-        'bash', './src/cyberdog_sim/cyberdog_simulator/cyberdog_gazebo/script/launchgazebo.sh'
+        'bash', './src/cyberdog_simulator/cyberdog_gazebo/script/launchgazebo.sh'
     ])
     time.sleep(5)
 
@@ -41,7 +41,7 @@ def launchsim():
         'gnome-terminal',
         '-t', 'cyberdog_control',
         '--',
-        'bash', './src/cyberdog_sim/cyberdog_simulator/cyberdog_gazebo/script/launchcontrol.sh'
+        'bash', './src/cyberdog_simulator/cyberdog_gazebo/script/launchcontrol.sh'
     ])
     time.sleep(5)
 
@@ -51,7 +51,7 @@ def launchsim():
         'gnome-terminal',
         '-t', 'cyberdog_viusal',
         '--',
-        'bash', './src/cyberdog_sim/cyberdog_simulator/cyberdog_gazebo/script/launchvisual.sh'
+        'bash', './src/cyberdog_simulator/cyberdog_gazebo/script/launchvisual.sh'
     ])
     time.sleep(5)
 

@@ -269,7 +269,7 @@ namespace gazebo
             worldPose->Rot().Z(),
             worldPose->Rot().W());
         transform.transform.rotation = tf2::toMsg(q);
-        tf_broadcaster_->sendTransform(transform);
+        // tf_broadcaster_->sendTransform(transform);
       }
     }
 

@@ -19,7 +19,10 @@ set(dependencies
   rclcpp_lifecycle
 )
 
-include_directories(include ${EIGEN3_INCLUDE_DIRS} 
+include_directories(include 
+                            ${EIGEN3_INCLUDE_DIRS}
+                            ${EIGEN3_INCLUDE_DIR}
+                            /usr/include/eigen3
                             ${Boost_INCLUDE_DIR}
                             ${BOOST_INCLUDE_DIRS}
                             ${TBB_INCLUDE_DIRS}
