@@ -1,0 +1,12 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[branch "main"]
+	vscode-merge-base = origin/main
+	remote = cyberdog2_Jazzy
+	merge = refs/heads/main
+[remote "cyberdog2_Jazzy"]
+	url = https://github.com/shazixuezhang/cyberdog2_Jazzy.git
+	fetch = +refs/heads/*:refs/remotes/cyberdog2_Jazzy/*
