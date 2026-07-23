@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>cyberdog_nav2_bringup</name>
+  <version>0.1.0</version>
+  <description>CyberDog 2 Navigation2 bringup configuration</description>
+  <maintainer email="your_email@example.com">Your Name</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- 只保留必要的执行依赖 -->
+  <exec_depend>nav2_bringup</exec_depend>
+  <exec_depend>rviz2</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

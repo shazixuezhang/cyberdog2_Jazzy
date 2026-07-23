@@ -55,5 +55,55 @@ def launchsim():
     ])
     time.sleep(5)
 
+    # 启动运动管理节点
+    print("Launch Motion Manager terminal...")
+    subprocess.run([
+        'gnome-terminal',
+        '-t', 'cyberdog_motion_manager',
+        '--',
+        'bash', './src/cyberdog_simulator/cyberdog_gazebo/script/launchmotion_manager.sh'
+    ])
+    time.sleep(5)
+
+    # 激活状态机，不激活状态机是无法发送指令 的
+    print("Activate State Machine terminal...")
+    subprocess.run([
+        'gnome-terminal',
+        '-t', 'cyberdog_activate_state_machine',
+        '--',
+        'bash', './src/cyberdog_simulator/cyberdog_gazebo/script/activate_state_machine.sh'
+    ])
+    time.sleep(5)
+
+    # 启动网页遥感终端
+    # print("Launch Web terminal...")
+    # subprocess.run([
+    #     'gnome-terminal',
+    #     '-t', 'cyberdog_web',
+    #     '--',
+    #     'bash', './src/cyberdog_simulator/cyberdog_gazebo/script/launchweb.sh'
+    # ])
+    # time.sleep(5)
+
+    # 启动slam_toolbox终端
+    print("Launch Slam Toolbox terminal...")
+    subprocess.run([
+        'gnome-terminal',
+        '-t', 'cyberdog_slam_toolbox',
+        '--',
+        'bash', './src/cyberdog_simulator/cyberdog_gazebo/script/launchslam_toolbox.sh'
+    ])
+    time.sleep(5)
+
+    # 启动导航终端
+    print("Launch Navigation terminal...")
+    subprocess.run([
+        'gnome-terminal',
+        '-t', 'cyberdog_navigation',
+        '--',
+        'bash', './src/cyberdog_simulator/cyberdog_gazebo/script/launchnavigation.sh'
+    ])
+    time.sleep(5)
+
 if __name__ == "__main__":
     launchsim()

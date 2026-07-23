@@ -1,0 +1,79 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+  - Class: rviz_common/Views
+    Name: Views
+Visualization Manager:
+  Displays:
+    # 地图
+    - Class: rviz_default_plugins/Map
+      Name: Map
+      Topic: /map
+      Color Scheme: costmap
+      Draw Behind: true
+
+    # 全局代价地图
+    - Class: rviz_default_plugins/Map
+      Name: Global Costmap
+      Topic: /global_costmap/costmap
+      Color Scheme: costmap
+      Enabled: true
+
+    # 局部代价地图
+    - Class: rviz_default_plugins/Map
+      Name: Local Costmap
+      Topic: /local_costmap/costmap
+      Color Scheme: costmap
+      Enabled: true
+
+    # 全局路径
+    - Class: rviz_default_plugins/Path
+      Name: Global Plan
+      Topic: /plan
+      Color: 0; 255; 0
+      Line Width: 0.05
+
+    # 局部路径
+    - Class: rviz_default_plugins/Path
+      Name: Local Plan
+      Topic: /local_plan
+      Color: 255; 255; 0
+      Line Width: 0.03
+
+    # 机器人模型
+    - Class: rviz_default_plugins/RobotModel
+      Name: RobotModel
+      Topic: /robot_description
+      Visual Enabled: true
+
+    # TF 坐标系
+    - Class: rviz_default_plugins/TF
+      Name: TF
+      Enabled: true
+
+    # 激光雷达
+    - Class: rviz_default_plugins/LaserScan
+      Name: LaserScan
+      Topic: /scan
+      Color: 255; 0; 0
+      Size: 0.01
+
+    # 全局规划器路径点
+    - Class: rviz_default_plugins/MarkerArray
+      Name: Planner Points
+      Topic: /received_global_plan
+
+    # 目标位姿
+    - Class: rviz_default_plugins/Pose
+      Name: Goal Pose
+      Topic: /goal_pose
+
+  Global Options:
+    Fixed Frame: map
+    Frame Rate: 30
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Distance: 10.0
+      Focal Point: [0, 0, 0]
+      Target Frame: base_link
