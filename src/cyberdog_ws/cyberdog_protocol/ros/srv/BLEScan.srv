@@ -1,0 +1,4 @@
+float64 scan_seconds
+---
+cyberdog_protocol/BLEInfo[] device_info_list
+int32 code

@@ -86,24 +86,24 @@ def launchsim():
     # time.sleep(5)
 
     # 启动slam_toolbox终端
-    print("Launch Slam Toolbox terminal...")
-    subprocess.run([
-        'gnome-terminal',
-        '-t', 'cyberdog_slam_toolbox',
-        '--',
-        'bash', './src/cyberdog_simulator/cyberdog_gazebo/script/launchslam_toolbox.sh'
-    ])
-    time.sleep(5)
+    # print("Launch Slam Toolbox terminal...")
+    # subprocess.run([
+    #     'gnome-terminal',
+    #     '-t', 'cyberdog_slam_toolbox',
+    #     '--',
+    #     'bash', './src/cyberdog_simulator/cyberdog_gazebo/script/launchslam_toolbox.sh'
+    # ])
+    # time.sleep(5)
 
     # 启动导航终端
-    print("Launch Navigation terminal...")
-    subprocess.run([
-        'gnome-terminal',
-        '-t', 'cyberdog_navigation',
-        '--',
-        'bash', './src/cyberdog_simulator/cyberdog_gazebo/script/launchnavigation.sh'
-    ])
-    time.sleep(5)
+    # print("Launch Navigation terminal...")
+    # subprocess.run([
+    #     'gnome-terminal',
+    #     '-t', 'cyberdog_navigation',
+    #     '--',
+    #     'bash', './src/cyberdog_simulator/cyberdog_gazebo/script/launchnavigation.sh'
+    # ])
+    # time.sleep(5)
 
 if __name__ == "__main__":
     launchsim()

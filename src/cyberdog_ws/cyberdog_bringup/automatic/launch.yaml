@@ -42,7 +42,7 @@ data:
   #------------------------------------------------------------->
   base:
     file_name: base.launch.py
-    nodes: [connector, cyberdog_audio, device_manager, sensor_manager, motion_manager, realsense2_camera, cyberdog_manager, odom_out_publisher, motor_bridge, cyberdog_grpc, bes_transmit, cyberdog_vp_engine, cyberdog_face, cyberdog_action, cyberdog_interactive, cyberdog_train, cyberdog_ai_sports]
+    nodes: [connector, cyberdog_audio, device_manager, sensor_manager, motion_manager, realsense2_camera, cyberdog_manager, odom_out_publisher, motor_bridge, cyberdog_grpc, bes_transmit, cyberdog_interaction_vp_engine, cyberdog_face, cyberdog_action, cyberdog_interactive, cyberdog_train, cyberdog_ai_sports]
 
   #------------------------------------------------------------->
   sim_base:
@@ -62,4 +62,4 @@ data:
   #------------------------------------------------------------->
   cyberdog_sudo:
     file_name: cyberdog_sudo.launch.py
-    nodes: [cyberdog_permission, cyberdog_wifi, cyberdog_ota, cyberdog_bluetooth, unlock_request, cyberdog_bluetooth_network]
+    nodes: [cyberdog_manager_permissions, cyberdog_wifi, cyberdog_ota, cyberdog_bluetooth, unlock_request, cyberdog_bluetooth_network]

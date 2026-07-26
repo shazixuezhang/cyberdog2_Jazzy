@@ -50,37 +50,37 @@ data:
 
   #------------------------------------------------------------->
   connector:
-    package: connector
+    package: cyberdog_interaction_connector
     executable: connector
 
   #------------------------------------------------------------->
   device_manager:
-    package: device_manager
+    package: cyberdog_device_manager
     executable: device_manager
 
   #------------------------------------------------------------->
   sensor_manager:
-    package: sensor_manager
+    package: cyberdog_sensors_manager
     executable: sensor_manager
 
   #------------------------------------------------------------->
   cyberdog_manager:
-    package: cyberdog_manager
+    package: cyberdog_manager_core
     executable: cyberdog_manager
 
   #------------------------------------------------------------->
   cyberdog_wifi:
-    package: cyberdog_wifi
+    package: cyberdog_device_wifi
     executable: cyberdog_wifi
 
   #------------------------------------------------------------->
   motion_manager:
-    package: motion_manager
+    package: cyberdog_motion_manager
     executable: motion_manager
 
   #------------------------------------------------------------->
   odom_out_publisher:
-    package: motion_bridge
+    package: cyberdog_motion_bridge
     executable: odom_out_publisher
     parameters:
       - {odom_frame: "odom",           
@@ -94,36 +94,36 @@ data:
 
   #------------------------------------------------------------->
   motor_bridge:
-    package: motion_bridge
+    package: cyberdog_motion_bridge
     executable: motor_bridge
 
   #------------------------------------------------------------->
   cyberdog_grpc:
-    package: cyberdog_grpc
+    package: cyberdog_bridge_grpc
     executable: app_server
 
   #------------------------------------------------------------->
   sim_mr813_controller:
-    package: motion_action
+    package: cyberdog_motion_action
     executable: test_as_controller
 
   #------------------------------------------------------------->
-  cyberdog_vp_engine:
-    package: cyberdog_vp_engine
-    executable: cyberdog_vp_engine
+  cyberdog_interaction_vp_engine:
+    package: cyberdog_interaction_vp_engine
+    executable: cyberdog_interaction_vp_engine
     output: screen
     emulate_tty: True
 
   #------------------------------------------------------------->
   sim_device_manager:
-    package: device_manager
+    package: cyberdog_device_manager
     executable: device_manager
     parameters:
       - {simulator: [*BMS, *TOUCH],           description: "需要开启模拟器模式的设备"}
 
   #------------------------------------------------------------->
   sim_sensor_manager:
-    package: sensor_manager
+    package: cyberdog_sensors_manager
     executable: sensor_manager
     parameters:
       - {simulator: [*GPS, *LIDAR, *TOF, *ULTRASONIC],     description: "需要开启模拟器模式的传感器"}
@@ -131,7 +131,7 @@ data:
   #------------------------------------------------------------->
   factory_sensor_manager:
     namespace: factory
-    package: sensor_manager
+    package: cyberdog_sensors_manager
     executable: sensor_manager
     parameters:
       - {simulator: [*LIDAR, *TOF, *ULTRASONIC],     description: "需要开启模拟器模式的传感器"}
@@ -139,24 +139,24 @@ data:
   #------------------------------------------------------------->
   factory_device_manager:
     namespace: factory
-    package: device_manager
+    package: cyberdog_device_manager
     executable: device_manager
     parameters:
       - {simulator: [*TOUCH],           description: "需要开启模拟器模式的设备"}
 
   #------------------------------------------------------------->
   cyberdog_audio:
-    package: cyberdog_audio
+    package: cyberdog_interaction_audio
     executable: cyberdog_audio
 
   #------------------------------------------------------------->
-  cyberdog_permission:
-    package: cyberdog_permission
-    executable: cyberdog_permission
+  cyberdog_manager_permissions:
+    package: cyberdog_manager_permissions
+    executable: cyberdog_manager_permissions
 
   #------------------------------------------------------------->
   cyberdog_face:
-    package: cyberdog_face
+    package: cyberdog_interaction_face
     executable: cyberdog_face
 
   #------------------------------------------------------------->
@@ -171,17 +171,17 @@ data:
 
   #------------------------------------------------------------->
   cyberdog_bluetooth:
-    package: cyberdog_bluetooth
+    package: cyberdog_device_bluetooth
     executable: cyberdog_bluetooth_main
 
   #------------------------------------------------------------->
   cyberdog_action:
-    package: cyberdog_action
+    package: cyberdog_interaction_action
     executable: cyberdog_action
 
   #------------------------------------------------------------->
   cyberdog_interactive:
-    package: cyberdog_interactive
+    package: cyberdog_interaction_interactive
     executable: cyberdog_interactive
 
   #------------------------------------------------------------->
@@ -191,7 +191,7 @@ data:
     
   #------------------------------------------------------------->
   cyberdog_ai_sports:
-    package: cyberdog_ai_sports
+    package: cyberdog_interaction_ai_sports
     executable: cyberdog_ai_sports
 
   #------------------------------------------------------------->
@@ -206,5 +206,5 @@ data:
 
   #------------------------------------------------------------->
   cyberdog_bluetooth_network:
-    package: cyberdog_bluetooth_network
+    package: cyberdog_device_bluetooth_network
     executable: cyberdog_bluetooth_main
